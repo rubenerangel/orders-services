@@ -20,11 +20,12 @@ export class OrdersService {
   ) {}
 
   async newOrder(orderDTO: OrderDTO): Promise<any> {
-    // Primero se guarda el cliente
-    const newCustomer = await this.customersService.newCust(orderDTO);
-
     // Buscamos el tecnico de manera Random
     const randomTechnical = await this.techniciansService.getRandomTechnicial();
+    if (!randomTechnical) return { message: 'No se han agregado Técnicos' };
+
+    // Se guarda el cliente
+    const newCustomer = await this.customersService.newCust(orderDTO);
 
     // Luego se guardan los demás datos de la orden
     const newOrder = new OrdersEntity();
